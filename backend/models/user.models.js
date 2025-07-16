@@ -27,9 +27,9 @@ const userSchema = new mongoose.Schema({
         refreshToken: {
         type: String,
     },
-    uploadHistory: [{ 
-        type: mongoose.Schema.Types.ObjectId, ref: 'Upload' 
-    }],
+    // uploadHistory: [{ 
+    //     type: mongoose.Schema.Types.ObjectId, ref: 'Upload' 
+    // }],
 }, {
     timestamps: true
 });

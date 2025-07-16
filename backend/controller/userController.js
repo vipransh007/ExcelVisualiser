@@ -1,5 +1,5 @@
-import { asyncHandler } from "../utils/asyncHandler.js";
-import { User } from "../models/users.models.js";
+import asynchHandler from "../utils/asynchHandler.js";
+import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
 // import { subscribe } from "diagnostics_channel";
@@ -24,7 +24,7 @@ const generateAccessAndRefreshToken = async(userId) =>
     }
 }
 
-const registerUser = asyncHandler(async (req, res) => {
+const registerUser = asynchHandler(async (req, res) => {
     const { fullName, email, username, password } = req.body;
 
     console.log("email:", email);
@@ -78,7 +78,7 @@ const registerUser = asyncHandler(async (req, res) => {
     });
 });
 
-const loginUser = asyncHandler(async (req, res) => {
+const loginUser = asynchHandler(async (req, res) => {
     const { email, username, password } = req.body;
 
     if (!(username || email)) {
@@ -119,7 +119,7 @@ const loginUser = asyncHandler(async (req, res) => {
         });
 });
 
-const logoutUser = asyncHandler(async (req, res) => {
+const logoutUser = asynchHandler(async (req, res) => {
     await User.findByIdAndUpdate(req.user._id, {
         $set: {
             refreshTokens: undefined
@@ -138,7 +138,7 @@ const logoutUser = asyncHandler(async (req, res) => {
         .json({ message: "User Logged Out" });
 });
 
-const refreshAccessToken = asyncHandler(async(req, res)=> {
+const refreshAccessToken = asynchHandler(async(req, res)=> {
     const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
 
     if(!incomingRefreshToken){
@@ -178,7 +178,7 @@ const refreshAccessToken = asyncHandler(async(req, res)=> {
  }
 })
 
-const changeCurrentPassword = asyncHandler(async(req, res) => {
+const changeCurrentPassword = asynchHandler(async(req, res) => {
     const {oldPassword, newPassword} = req.body;
 
     const user = await User.findById(req.user?._id)
@@ -197,14 +197,14 @@ const changeCurrentPassword = asyncHandler(async(req, res) => {
 
 
 })
-const getCurrentUser = asyncHandler(async (req, res) => {
+const getCurrentUser = asynchHandler(async (req, res) => {
     return res.status(200).json({
         user: req.user,
         message: "Current user fetched successfully"
     });
 });
 
-const updateAccountDetails = asyncHandler(async (req, res) => {
+const updateAccountDetails = asynchHandler(async (req, res) => {
     const { fullName, email } = req.body;
 
     if (!fullName || !email) {
@@ -228,7 +228,7 @@ const updateAccountDetails = asyncHandler(async (req, res) => {
     });
 });
 
-const updateUserAvatar = asyncHandler(async(req, res) =>{
+const updateUserAvatar = asynchHandler(async(req, res) =>{
     const avatarLocalPath = req.files?.path
     
     if(!avatarLocalPath){
@@ -257,7 +257,7 @@ const updateUserAvatar = asyncHandler(async(req, res) =>{
     })
 
 })
-const updateUserCoverImage = asyncHandler(async(req, res) =>{
+const updateUserCoverImage = asynchHandler(async(req, res) =>{
     const CoverImageLocalPath = req.files?.path
     
     if(!avatarLocalPath){
@@ -285,7 +285,7 @@ const updateUserCoverImage = asyncHandler(async(req, res) =>{
         message: "User Image Uploaded Successfully"
     })
 })
-const getUserChannelProfile = asyncHandler(async (req, res) => {
+const getUserChannelProfile = asynchHandler(async (req, res) => {
     const { username } = req.params;
 
     if (!username?.trim()) {
@@ -348,7 +348,7 @@ const getUserChannelProfile = asyncHandler(async (req, res) => {
     return res.status(200).json(channel[0]);
 });
 
-const getWatchHistory = asyncHandler(async(req,res) => {
+const getWatchHistory = asynchHandler(async(req,res) => {
     const user = await User.aggregate([
         {
             $match: {

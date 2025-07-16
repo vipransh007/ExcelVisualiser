@@ -13,7 +13,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 
-import userRoutes from "./routes/user.routes.js";
+import userRoutes from './routes/userRoutes.js';
 
 app.use("/api/v1/users", userRoutes);
 

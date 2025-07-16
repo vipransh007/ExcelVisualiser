@@ -12,10 +12,11 @@ import {
     getUserChannelProfile,
     getWatchHistory
 }
-    from "../controller/user.controllers.js";
+    from "../controller/userController.js";
 
-// Almost import { verifyJWT } from "../middlewares/auth.js";
-import { get } from "http";
+import asynchHandler from "../utils/asynchHandler.js";
+import { upload } from "../middlewares/multer.js";
+import { verifyJWT } from "../middlewares/auth.js";
 
 const router = Router()
 
