@@ -14,8 +14,7 @@ import {
 }
     from "../controller/user.controllers.js";
 
-// import { upload } from "../middlewares/multer.js"
-import { verifyJWT } from "../middlewares/auth.js";
+// Almost import { verifyJWT } from "../middlewares/auth.js";
 import { get } from "http";
 
 const router = Router()
