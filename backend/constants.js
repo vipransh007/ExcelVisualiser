@@ -1,1 +1,1 @@
-export const DB_NAME = "excel-visualiser"; 
+export const DB_NAME = "excel-visualiser";
