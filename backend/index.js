@@ -1,20 +1,19 @@
+// In your main index.js file
+
 import dotenv from "dotenv";
 import connectDB from "./db/index.js";
 import { app } from "./app.js";
-import userRoutes from "./routes/userRoutes.js";
-app.use("/api/v1/users", userRoutes);
 
-// Configure environment variables
+// This MUST be the first line of code to run
 dotenv.config({
     path: './.env'
 });
 
-const port = 5000;
+const port = process.env.PORT ;
 
 connectDB()
 .then(() => {
     app.listen(port, () => {
-        // This is the only log you need here.
         console.log(`✅ Server is running on port: ${port}`);
     });
 })

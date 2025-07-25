@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 import { DB_NAME } from "../constants.js";
 import dotenv from "dotenv";
+import path from "path";
+import { log } from "console";
 
-dotenv.config();
+dotenv.config({
+    path: './.env'
+});
 
-const port = process.env.PORT || 5000;
-const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://vipransh231527:Vipransh2315@cluster0.f0fl1.mongodb.net'
+// const port = process.env.PORT || 5000;
+const MONGO_URI = process.env.MONGO_URI;
 const connectDB = async () => {
   try {
     const connectionInstance = await mongoose.connect(`${MONGO_URI}/${DB_NAME}`);

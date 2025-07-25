@@ -13,8 +13,9 @@ const generateAccessAndRefreshToken = async (userId) => {
 };
 
 const registerUser = asynchHandler(async (req, res) => {
-    const { fullName, email, username, password } = req.body;
-    if ([fullName, email, username, password].some((field) => !field?.trim())) {
+    const { email, username, password } = req.body;
+    
+    if ([email, username, password].some((field) => !field?.trim())) {
         return res.status(400).json({ message: "All fields are required" });
     }
     const existingUser = await User.findOne({
@@ -34,7 +35,6 @@ const registerUser = asynchHandler(async (req, res) => {
         return res.status(400).json({ message: "Avatar file failed to upload" });
     }
     const user = await User.create({
-        fullName,
         avatar: avatar.url,
         coverImage: coverImage?.url || "",
         email,
