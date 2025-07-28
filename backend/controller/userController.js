@@ -157,13 +157,13 @@ const getCurrentUser = asynchHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asynchHandler(async (req, res) => {
-    const { fullName, email } = req.body;
-    if (!fullName || !email) {
-        return res.status(400).json({ message: "Full name and email are required" });
+    const { username, email } = req.body;
+    if (!username || !email) {
+        return res.status(400).json({ message: "Username and email are required" });
     }
     const user = await User.findByIdAndUpdate(
         req.user?._id,
-        { $set: { fullName, email } },
+        { $set: { username, email } },
         { new: true }
     ).select("-password");
     return res.status(200).json({
