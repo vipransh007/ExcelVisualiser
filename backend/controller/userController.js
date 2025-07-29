@@ -2,6 +2,8 @@ import asynchHandler from "../utils/asynchHandler.js";
 import { User } from "../models/user.models.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+const upload = multer();
 
 const generateAccessAndRefreshToken = async (userId) => {
     const user = await User.findById(userId);
@@ -85,6 +87,9 @@ const loginUser = asynchHandler(async (req, res) => {
 });
 
 const logoutUser = asynchHandler(async (req, res) => {
+    if (!req.user || !req.user._id) {
+        return res.status(401).json({ message: "Unauthorized" });
+    }
     await User.findByIdAndUpdate(
         req.user._id,
         { $unset: { refreshToken: 1 } },
@@ -157,13 +162,13 @@ const getCurrentUser = asynchHandler(async (req, res) => {
 });
 
 const updateAccountDetails = asynchHandler(async (req, res) => {
-    const { username, email } = req.body;
-    if (!username || !email) {
-        return res.status(400).json({ message: "Username and email are required" });
+    const { fullName, email } = req.body;
+    if (!fullName || !email) {
+        return res.status(400).json({ message: "Full name and email are required" });
     }
     const user = await User.findByIdAndUpdate(
         req.user?._id,
-        { $set: { username, email } },
+        { $set: { fullName, email } },
         { new: true }
     ).select("-password");
     return res.status(200).json({
