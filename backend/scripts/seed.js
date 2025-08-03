@@ -6,6 +6,7 @@ import { fileURLToPath } from 'url';
 import csv from 'csv-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import { DB_NAME } from '../constants.js';
 
 // Import your Graph model (note the required .js extension)
 import Graph from '../models/model.graphs.js';
@@ -34,7 +35,7 @@ const seedDatabase = async () => {
   }
 
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+     await mongoose.connect(`${process.env.MONGO_URI}/${DB_NAME}`);
     console.log("MongoDB Connected...");
 
     // This stream reads the CSV file line by line
