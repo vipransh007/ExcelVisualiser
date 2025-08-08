@@ -13,8 +13,6 @@ function App() {
         <Routes>
           {/* Route for the home page */}
           <Route path="/" element={<Home />} />
-          
-          {/* Route for the plot types page */}
           <Route path="/plot-types" element={<PlotTypes />} />
         </Routes>
       </Box>

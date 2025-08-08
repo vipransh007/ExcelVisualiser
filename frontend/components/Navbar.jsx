@@ -1,6 +1,7 @@
 import { AppBar, Toolbar, Typography, Button, Box, Link, ButtonGroup } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import { useNavigate } from 'react-router';
 
 // A simple Plotly-style logo icon component for the navbar
 const PlotlyLogoIcon = () => (
@@ -11,6 +12,7 @@ const PlotlyLogoIcon = () => (
 
 // The main Navbar component using Material-UI
 function Navbar() {
+  const navigate = useNavigate();
   return (
     <AppBar 
         position="static" 
@@ -29,6 +31,7 @@ function Navbar() {
                 height: 32,
                 backgroundColor: 'primary.main',
                 borderRadius: 1,
+                onClick: () => navigate('/'),
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',

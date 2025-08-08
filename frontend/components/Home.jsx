@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Box,
@@ -17,51 +18,63 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import AppsIcon from '@mui/icons-material/Apps';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { useNavigate } from 'react-router-dom';
-// import { useNavigate } from 'react-router-dom';
-import PlotTypes from './PlotTypes';
 
 // The main Home component using Material-UI
 function Home() {
+  // --- STATE AND HOOKS INITIALIZATION ---
   const [fileType, setFileType] = React.useState('all');
   const [plotType, setPlotType] = React.useState('all');
   const [view, setView] = React.useState('grid');
   const videoRef = useRef(null);
+  
+  // Correctly initialize useNavigate at the top level of the component
+  const navigate = useNavigate();
 
+  // --- EVENT HANDLERS ---
   const handleViewChange = (event, newView) => {
     if (newView !== null) {
       setView(newView);
     }
   };
-  useNavigate = useNavigate();
-  // Effect to ensure the video plays on component mount
+
+  const handlePlotTypeChange = (event) => {
+    const selectedValue = event.target.value;
+    
+    // If the user selects the special "browse" option, then navigate.
+    if (selectedValue === 'browse-all') {
+      navigate('/plot-types');
+    } else {
+      // Otherwise, just update the state like a normal dropdown.
+      setPlotType(selectedValue);
+    }
+  };
+  
+  // --- SIDE EFFECTS ---
   useEffect(() => {
-    // Check if the ref is attached to the video element
+    // This effect ensures the background video plays automatically
     if (videoRef.current) {
-      // The play() method returns a promise, which can be ignored here
       videoRef.current.play().catch(error => {
-        // Log any errors that might occur if autoplay is blocked
         console.error("Video autoplay was prevented:", error);
       });
     }
-  }, []); // Empty dependency array ensures this runs only once on mount
+  }, []); // Empty dependency array means this runs only once on mount
 
+  // --- RENDER ---
   return (
-    // Main container for the home page
     <Box
       sx={{
-        position: 'relative', // Needed for video positioning
-        minHeight: 'calc(100vh - 64px)', // Full height minus navbar
+        position: 'relative',
+        minHeight: 'calc(100vh - 64px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         py: 4,
-        overflow: 'hidden', // Hide anything that might overflow
+        overflow: 'hidden', 
       }}
     >
       {/* Background Video */}
       <video
-        ref={videoRef} // Attach the ref to the video element
+        ref={videoRef} 
         autoPlay
         loop
         muted
@@ -69,14 +82,13 @@ function Home() {
         style={{
           position: 'absolute',
           width: '100%',
-          height: '90%',
+          height: '100%',
           objectFit: 'cover',
           top: 0,
           left: 0,
-          zIndex: -2,
+          zIndex: -1,
         }}
       >
-        {/* The video file should be in the `public` folder */}
         <source src="/websiteVideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
@@ -86,7 +98,6 @@ function Home() {
         <Box sx={{
             textAlign: 'center',
             color: 'white',
-            // Add a semi-transparent overlay to make text more readable
             backgroundColor: 'rgba(85, 110, 136, 0.52)',
             padding: 4,
             borderRadius: 2,
@@ -98,7 +109,6 @@ function Home() {
             Search public charts by Chart Studio users
           </Typography>
 
-          {/* Search Bar */}
           <TextField
             fullWidth
             variant="outlined"
@@ -107,17 +117,7 @@ function Home() {
               backgroundColor: 'white',
               borderRadius: 1,
               mb: 3,
-              '& .MuiOutlinedInput-root': {
-                '& fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&:hover fieldset': {
-                  borderColor: 'transparent',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: 'primary.main',
-                },
-              },
+              '& .MuiOutlinedInput-root': { '& fieldset': { borderColor: 'transparent' } },
             }}
             InputProps={{
               endAdornment: (
@@ -133,7 +133,7 @@ function Home() {
             <Button
               variant="contained"
               startIcon={<FavoriteBorderIcon />}
-              sx={{ backgroundColor: 'white', color: '#df2b2bff', '&:hover': { backgroundColor: '#010928ff' } }}
+              sx={{ backgroundColor: 'white', color: '#df2b2bff', '&:hover': { backgroundColor: '#9298b1ff' } }}
             >
               Handpicked
             </Button>
@@ -154,19 +154,24 @@ function Home() {
             <FormControl sx={{ minWidth: 150, backgroundColor: 'white', borderRadius: 1 }}>
               <Select
                 value={plotType}
-                onClick={() => F('PlotTypes.jsx')}
-                onChange={(e) => setPlotType(e.target.value)}
+                onChange={handlePlotTypeChange}
                 displayEmpty
                 IconComponent={ArrowDropDownIcon}
               >
-                <MenuItem value="all">All Plot Type</MenuItem>
-                <MenuItem value="plot1">Plot 1</MenuItem>
-                <MenuItem value="plot2">Plot 2</MenuItem>
+                <MenuItem value="all">All Plot Types</MenuItem>
+                <MenuItem value="bar">Bar Chart</MenuItem>
+                <MenuItem value="line">Line Chart</MenuItem>
+                <MenuItem value="scatter">Scatter Plot</MenuItem>
+                <MenuItem 
+                  value="browse-all" 
+                  sx={{color: 'primary.main', fontWeight: 'bold', borderTop: '1px solid #eee', mt: 1}}
+                >
+                  Browse all types...
+                </MenuItem>
               </Select>
             </FormControl>
           </Box>
           
-          {/* View Toggle */}
           <ToggleButtonGroup
             value={view}
             exclusive
