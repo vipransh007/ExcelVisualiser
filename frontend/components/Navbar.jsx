@@ -1,7 +1,7 @@
 import { AppBar, Toolbar, Typography, Button, Box, Link, ButtonGroup } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import { useNavigate } from 'react-router';
+import { useNavigate } from 'react-router-dom';
 
 // A simple Plotly-style logo icon component for the navbar
 const PlotlyLogoIcon = () => (
@@ -31,12 +31,16 @@ function Navbar() {
                 height: 32,
                 backgroundColor: 'primary.main',
                 borderRadius: 1,
-                onClick: () => navigate('/'),
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 mr: 1,
+                cursor: 'pointer',
+                '&:hover': {
+                  backgroundColor: 'primary.dark',
+                },
               }}
+              onClick={() => navigate('/')}
             >
               <PlotlyLogoIcon />
             </Box>
