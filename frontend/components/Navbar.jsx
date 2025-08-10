@@ -81,8 +81,8 @@ function Navbar() {
             variant="contained"
             aria-label="login and sign up button group"
           >
-            <Button>Login</Button>
-            <Button>SignUp</Button>
+            <Button onClick={() => navigate('/login')}>Login</Button>
+            <Button onClick={() => navigate('/signup')}>SignUp</Button>
           </ButtonGroup>
 
         </Box>

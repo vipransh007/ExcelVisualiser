@@ -1,8 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-// The useNavigate hook was removed as it was causing an error.
-// import { useNavigate } from 'react-router-dom';
-
+import React, { useState, useRef, useEffect, useNavigate } from 'react';
 function SignUp() {
+  
   // State to hold the preview URLs for the images
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverImagePreview, setCoverImagePreview] = useState(null);
@@ -35,6 +33,7 @@ function SignUp() {
       });
     }
   }, []);
+
 
   return (
     <div className="relative flex items-center justify-center min-h-screen py-10 overflow-hidden">
