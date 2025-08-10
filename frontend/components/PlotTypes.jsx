@@ -12,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 // --- Placeholder Icons ---
 // In a real app, you would replace these with actual SVG icons for each chart type.
+import { useNavigate } from 'react-router-dom';
 import ScatterPlotIcon from '@mui/icons-material/BubbleChart';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LineChartIcon from '@mui/icons-material/ShowChart';
@@ -106,12 +107,14 @@ const ChartCard = ({ name, icon }) => (
   </Card>
 );
 
-function PlotTypes({ navigateTo }) {
+function PlotTypes() {
+  const navigate = useNavigate();
   return (
     <Box sx={{ bgcolor: '#e3f2fd', p: 4 }}>
       <Container maxWidth="lg">
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3}}>
-          <Typography variant="h5" sx={{ color: 'text.secondary' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3        }}>
+          <Typography variant="h5" 
+          sx={{ color: 'text.secondary' }}>
             Select Trace Type
           </Typography>
           <IconButton  >
