@@ -117,7 +117,7 @@ function PlotTypes() {
           sx={{ color: 'text.secondary' }}>
             Select Trace Type
           </Typography>
-          <IconButton  >
+          <IconButton onClick={() => navigate(-1)} sx={{ color: 'text.secondary' }}>
             <CloseIcon />
 
           </IconButton>

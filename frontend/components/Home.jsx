@@ -19,9 +19,8 @@ import AppsIcon from '@mui/icons-material/Apps';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-// The main Home component using Material-UI
 function Home() {
-  // --- STATE AND HOOKS INITIALIZATION ---
+
   const [fileType, setFileType] = React.useState('all');
   const [plotType, setPlotType] = React.useState('all');
   const [view, setView] = React.useState('grid');
