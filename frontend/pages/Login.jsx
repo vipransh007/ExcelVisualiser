@@ -1,76 +1,57 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  Container,
-  Box,
-  Typography,
-  TextField,
-  InputAdornment,
-  Button,
-  Select,
-  MenuItem,
-  FormControl,
-  ToggleButtonGroup,
-  ToggleButton,
-} from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import AppsIcon from '@mui/icons-material/Apps';
-import ViewListIcon from '@mui/icons-material/ViewList';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 function Login() {
-
-  const [fileType, setFileType] = React.useState('all');
-  const [plotType, setPlotType] = React.useState('all');
-  const [view, setView] = React.useState('grid');
+  // State for form data
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  
+  // Ref for the video background
   const videoRef = useRef(null);
   
-  // Correctly initialize useNavigate at the top level of the component
+  // Initialize useNavigate
   const navigate = useNavigate();
 
-  // --- EVENT HANDLERS ---
-  const handleViewChange = (event, newView) => {
-    if (newView !== null) {
-      setView(newView);
-    }
-  };
+  // Handle form submission
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    setError('');
 
-  const handlePlotTypeChange = (event) => {
-    const selectedValue = event.target.value;
-    
-    // If the user selects the special "browse" option, then navigate.
-    if (selectedValue === 'browse-all') {
-      navigate('/plot-types');
-    } else {
-      // Otherwise, just update the state like a normal dropdown.
-      setPlotType(selectedValue);
+    try {
+      const response = await fetch('http://localhost:5000/api/v1/users/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (response.ok) {
+        console.log('Login Successful');
+        // Navigate to home page after successful login
+        navigate('/');
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Network error occurred');
     }
   };
   
-  // --- SIDE EFFECTS ---
+  // Effect to ensure the background video plays
   useEffect(() => {
-    // This effect ensures the background video plays automatically
     if (videoRef.current) {
       videoRef.current.play().catch(error => {
         console.error("Video autoplay was prevented:", error);
       });
     }
-  }, []); // Empty dependency array means this runs only once on mount
+  }, []);
 
-  // --- RENDER ---
   return (
-    <Box
-      sx={{
-        position: 'relative',
-        minHeight: 'calc(100vh - 64px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        py: 4,
-        overflow: 'hidden', 
-      }}
-    >
+    <div className="relative flex items-center justify-center min-h-screen py-4 overflow-hidden">
       {/* Background Video */}
       <video
         ref={videoRef} 
@@ -78,74 +59,76 @@ function Login() {
         loop
         muted
         playsInline 
-        style={{
-          position: 'absolute',
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          top: 0,
-          left: 0,
-          zIndex: -1,
-        }}
+        className="absolute top-0 left-0 w-full h-full object-cover z-0"
       >
         <source src="/websiteVideo.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
- <div className="flex items-center opacity-100 justify-center rounded-3xl bg-[#154a6fa1]">
+      <div className="flex items-center opacity-100 justify-center rounded-3xl bg-[#154a6fa1]">
+        <div className="relative opacity-100 z-10 flex flex-col w-full max-w-md gap-8 p-8">
+          <div className="flex flex-col justify-center text-center text-white">
+            <h1 className="text-5xl font-bold tracking-tight">
+              Login!
+            </h1>
+            <p className="mt-2 text-lg text-gray-100">
+              Welcome! Please log in to continue.
+            </p>
+          </div>
 
-      <div className="relative opacity-100 z-10 flex flex-col w-full max-w-md gap-8 p-8">
-
-        <div className="flex flex-col justify-center text-center text-white">
-          <h1 className="text-5xl font-bold tracking-tight">
-            Login!
-          </h1>
-          <p className="mt-2 text-lg text-gray-100">
-            Welcome! Please log in to continue.
-          </p>
-        </div>
-
-        {/* --- Login Form --- */}
-        <div className="flex flex-col justify-center">
-          <form className="space-y-4">
-            <div>
-              <label htmlFor="username" className="sr-only">Username</label>
-              <input 
-                type="text" 
-                id="username"
-                placeholder="Username" 
-                className="w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
-              />
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-500 text-white p-3 rounded-lg text-center">
+              {error}
             </div>
-            
-            <div>
+          )}
+
+          {/* --- Login Form --- */}
+          <div className="flex flex-col justify-center">
+            <form className="space-y-4" onSubmit={handleLogin}>
+              <div>
+                <label htmlFor="username" className="sr-only">Username</label>
+                <input 
+                  type="text" 
+                  id="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Username" 
+                  className="w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  required
+                />
+              </div>
+              
+              <div>
                 <label htmlFor="password" className="sr-only">Password</label>
                 <input 
-                    type="password" 
-                    id="password"
-                    placeholder="Password" 
-                    className="w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  type="password" 
+                  id="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Password" 
+                  className="w-full px-4 py-3 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500" 
+                  required
                 />
-            </div>
-
-            <button 
-              type="submit" 
-              className="w-full py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
-            >
-              Login
-            </button>
-            <div className="text-center">
-              <p className="text-lg text-white">
-                Don't have an account? 
-                <a href="/signup" className="text-blue-600 hover:underline"> Sign Up</a>
-              </p>
               </div>
-          </form>
+
+              <button 
+                type="submit" 
+                className="w-full py-3 font-semibold text-white bg-blue-600 rounded-lg shadow-md hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all"
+              >
+                Login
+              </button>
+              <div className="text-center">
+                <p className="text-lg text-white">
+                  Don't have an account? 
+                  <a href="/signup" className="text-blue-600 hover:underline"> Sign Up</a>
+                </p>
+              </div>
+            </form>
+          </div>
         </div>
-        
       </div>
     </div>
-    </Box>
   );
 }
 
