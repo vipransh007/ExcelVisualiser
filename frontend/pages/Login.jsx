@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../src/context/AuthContext.jsx';
 
 function Login() {
   // State for form data
@@ -10,8 +11,9 @@ function Login() {
   // Ref for the video background
   const videoRef = useRef(null);
   
-  // Initialize useNavigate
+  // Initialize useNavigate and useAuth
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   // Handle form submission
   const handleLogin = async (event) => {
@@ -19,16 +21,23 @@ function Login() {
     setError('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/v1/users/login', {
+      const response = await fetch('/api/v1/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ username, password }),
+        credentials: 'include', // Include cookies for session management
       });
 
       if (response.ok) {
-        console.log('Login Successful');
+        const data = await response.json();
+        console.log('Login Successful:', data); // Log the response data
+        console.log('User Data:', data.user); // Log the user data being set
+        
+        // Update the AuthContext with user data
+        setUser(data.user);
+        
         // Navigate to home page after successful login
         navigate('/');
       } else {

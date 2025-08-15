@@ -6,21 +6,25 @@ import PlotTypes from '../components/PlotTypes.jsx';
 import { Box } from '@mui/material';
 import Login from '../pages/Login.jsx';
 import SignUp from '../pages/SignUp.jsx';
+import { AuthProvider } from '../src/context/AuthContext.jsx'; // Import the AuthProvider
 
 function App() {
   return (
-    <BrowserRouter>
-      <Box>
-        <Navbar />
-        <Routes>
-          {/* Route for the home page */}
-          <Route path="/" element={<Home />} />
-          <Route path="/plot-types" element={<PlotTypes />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Routes>
-      </Box>
-    </BrowserRouter>
+    // The AuthProvider now wraps your entire application
+    <AuthProvider>
+      <BrowserRouter>
+        <Box>
+          <Navbar />
+          <Routes>
+            {/* Your routes remain unchanged */}
+            <Route path="/" element={<Home />} />
+            <Route path="/plot-types" element={<PlotTypes />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Routes>
+        </Box>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
 
