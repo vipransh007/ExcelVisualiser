@@ -21,9 +21,9 @@ export const AuthProvider = ({ children }) => {
                 console.log('Verifying user on app load...');
                 // The browser automatically sends the cookies with this request
                 const response = await axios.get('/api/v1/users/current-user');
-                console.log('Current user response:', response.data);
+                // console.log('Current user response:', response.data);
                 if (response.data && response.data.user) {
-                    console.log('Setting user from response:', response.data.user);
+                    // console.log('Setting user from response:', response.data.user);
                     setUser(response.data.user); // Set user data if the token is valid
                 }
             } catch (error) {

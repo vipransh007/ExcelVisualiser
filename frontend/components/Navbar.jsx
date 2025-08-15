@@ -20,7 +20,7 @@ function Navbar() {
   const [anchorEl, setAnchorEl] = useState(null);
 
   // Debug logging
-  console.log('Navbar render:', { isAuthenticated, user, loading });
+  // console.log('Navbar render:', { isAuthenticated, user, loading });
 
   const handleLogout = async () => {
     await logout();

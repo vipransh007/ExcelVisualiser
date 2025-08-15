@@ -6,6 +6,7 @@ import PlotTypes from '../components/PlotTypes.jsx';
 import { Box } from '@mui/material';
 import Login from '../pages/Login.jsx';
 import SignUp from '../pages/SignUp.jsx';
+import ChartDisplay from '../components/ChartsDisplay.jsx'; // Import the ChartDisplay component
 import { AuthProvider } from '../src/context/AuthContext.jsx'; // Import the AuthProvider
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
           </Routes>
+          <ChartDisplay /> {/* Add the ChartDisplay component here */}
         </Box>
       </BrowserRouter>
     </AuthProvider>
