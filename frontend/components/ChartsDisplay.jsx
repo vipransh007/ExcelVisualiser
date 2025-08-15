@@ -108,7 +108,7 @@ function ChartDisplay() {
       
       <Grid container spacing={3}>
         {graphs.map((graph, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={graph._id || index}>
+          <Grid item xs={12} md={6} key={graph._id || index}>
             <Card 
               sx={{ 
                 height: '100%', 
