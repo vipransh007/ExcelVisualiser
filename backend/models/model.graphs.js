@@ -20,6 +20,14 @@ const GraphSchema = new mongoose.Schema({
   },
   
   description: String,
+  type: {
+    type: String,
+    enum: ['scatter', 'line', 'bar', 'pie', 'histogram'],
+    default: 'scatter'
+  },
+  tags: [{
+    type: String
+  }],
 }, { timestamps: true });
 
 const Graph = mongoose.model('Graph', GraphSchema);

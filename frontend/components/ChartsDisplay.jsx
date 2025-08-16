@@ -18,6 +18,8 @@ import {
   Chip
 } from '@mui/material';
 import { Visibility, Close } from '@mui/icons-material';
+import Navigation from './Navigation.jsx';
+import CreateChart from './CreateChart.jsx';
 
 function ChartDisplay() {
   // State to hold the random graphs data
@@ -31,30 +33,10 @@ function ChartDisplay() {
   const [selectedGraph, setSelectedGraph] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
 
+  // State for view switching
+  const [currentView, setCurrentView] = useState('community');
+
   useEffect(() => {
-    // Function to fetch random graph data from the community feed
-    const fetchRandomGraphs = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        // Fetch random graphs from the community feed endpoint
-        const response = await axios.get('/api/v1/graphs/community-feed');
-        
-        if (response.data.success) {
-          setGraphs(response.data.data);
-        } else {
-          setError("Failed to fetch graphs data");
-        }
-
-      } catch (err) {
-        console.error("Failed to fetch random graphs:", err);
-        setError("Could not load the graphs from the server. Please ensure the backend is running.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchRandomGraphs();
   }, []); // The empty array ensures this runs only once when the component mounts
 
@@ -99,12 +81,53 @@ function ChartDisplay() {
     );
   }
 
+  // Function to fetch random graph data from the community feed
+  const fetchRandomGraphs = async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // Fetch random graphs from the community feed endpoint
+      const response = await axios.get('/api/v1/graphs/community-feed');
+      
+      if (response.data.success) {
+        setGraphs(response.data.data);
+      } else {
+        setError("Failed to fetch graphs data");
+      }
+
+    } catch (err) {
+      console.error("Failed to fetch random graphs:", err);
+      setError("Could not load the graphs from the server. Please ensure the backend is running.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle view change
+  const handleViewChange = (view) => {
+    setCurrentView(view);
+    if (view === 'community') {
+      // Refresh the community feed when switching back
+      fetchRandomGraphs();
+    }
+  };
+
+  // Function to refresh graphs (can be passed to CreateChart)
+  const refreshGraphs = () => {
+    fetchRandomGraphs();
+  };
+
   // Render the random graphs in a grid layout with cards
   return (
     <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
-        Community Feed - Random Graphs ({graphs.length} graphs)
-      </Typography>
+      <Navigation currentView={currentView} onViewChange={handleViewChange} />
+      
+      {currentView === 'community' ? (
+        <>
+          <Typography variant="h4" gutterBottom sx={{ mb: 3 }}>
+            Community Feed 
+          </Typography>
       
       <Grid container spacing={3}>
         {graphs.map((graph, index) => (
@@ -276,6 +299,10 @@ function ChartDisplay() {
           )}
         </DialogContent>
       </Dialog>
+        </>
+      ) : (
+        <CreateChart onChartCreated={refreshGraphs} />
+      )}
     </Box>
   );
 }

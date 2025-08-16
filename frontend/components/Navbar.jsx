@@ -57,7 +57,7 @@ function Navbar() {
         {/* Left Section */}
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mr: 3 }}>
-            <Box sx={{ width: 32, height: 32, backgroundColor: 'primary.main', borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 1 }}>
+            <Box onClick={() => navigate('/')} sx={{ width: 32, height: 32, backgroundColor: 'primary.main', borderRadius: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 1 }}>
               <PlotlyLogoIcon />
             </Box>
             <Typography variant="h6" component="div" sx={{ color: 'text.primary', fontWeight: 'bold' }}>
@@ -77,13 +77,13 @@ function Navbar() {
           {/* We wait for the initial loading check to complete before showing any buttons */}
           {!loading && (
             <>
-              <Button
+              {/* <Button
                 variant="outlined"
                 startIcon={<AddIcon />}
                 sx={{ textTransform: 'none', fontWeight: 'bold' }}
               >
                 Create
-              </Button>
+              </Button> */}
               {user?.username}
               {isAuthenticated ? (
                 // If user IS logged in, show avatar with dropdown
